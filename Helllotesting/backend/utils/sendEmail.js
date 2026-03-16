@@ -1,41 +1,32 @@
-const nodemailer = require('nodemailer');
+const sgMail = require('@sendgrid/mail');
 
 const sendEmail = async (options) => {
   console.log('📧 Attempting to send email to:', options.email);
-  console.log('📧 EMAIL_USER set:', process.env.EMAIL_USER ? 'Yes' : 'NO');
-  console.log('📧 EMAIL_PASS set:', process.env.EMAIL_PASS ? 'Yes (length: ' + process.env.EMAIL_PASS.length + ')' : 'NO');
+  console.log('📧 SENDGRID_API_KEY set:', process.env.SENDGRID_API_KEY ? 'Yes' : 'NO');
+  console.log('📧 EMAIL_FROM set:', process.env.EMAIL_FROM ? 'Yes' : 'NO');
 
-  const transporter = nodemailer.createTransport({
-    host: 'smtp.gmail.com',
-    port: 465,
-    secure: true,
-    auth: {
-      user: process.env.EMAIL_USER,
-      pass: process.env.EMAIL_PASS,
-    },
-    tls: {
-      rejectUnauthorized: false
-    },
-    debug: true,
-    logger: true,
-    family: 4
-  });
+  if (!process.env.SENDGRID_API_KEY) {
+    throw new Error('SENDGRID_API_KEY not set');
+  }
 
-  const mailOptions = {
-    from: `"Skill Exchange" <${process.env.EMAIL_USER}>`,
+  sgMail.setApiKey(process.env.SENDGRID_API_KEY);
+
+  const msg = {
     to: options.email,
+    from: process.env.EMAIL_FROM || 'noreply@skillexchange.com',
     subject: options.subject,
     text: options.message,
-    html: options.html
+    html: options.html,
   };
 
   try {
-    const info = await transporter.sendMail(mailOptions);
-    console.log('✅ Email sent:', info.response);
-    return info;
+    await sgMail.send(msg);
+    console.log('✅ Email sent successfully to:', options.email);
   } catch (error) {
-    console.error('❌ Email Error:', error.message);
-    console.error('❌ Error Code:', error.code);
+    console.error('❌ SendGrid Error:', error.message);
+    if (error.response) {
+      console.error('❌ SendGrid Response:', error.response.body);
+    }
     throw error;
   }
 };
