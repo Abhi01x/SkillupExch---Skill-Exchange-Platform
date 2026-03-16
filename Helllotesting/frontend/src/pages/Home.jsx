@@ -20,13 +20,13 @@ const Home = () => {
                 <Zap className="w-4 h-4 text-accent-400" /> Free Peer-to-Peer Learning Platform
               </span>
             </div>
-            <h1 className="animate-fade-in-up text-4xl sm:text-5xl lg:text-6xl font-extrabold text-white mb-6 tracking-tight leading-tight">
-              Exchange Skills,
-              <br />
-              <span className="bg-gradient-to-r from-accent-400 to-primary-300 bg-clip-text text-transparent">
-                Empower Futures
-              </span>
-            </h1>
+           <h1 className="animate-fade-in-up text-4xl sm:text-5xl lg:text-6xl font-extrabold text-white mb-6 tracking-tight leading-tight">
+           Exchange Skills,
+           <br />
+          <span className="bg-gradient-to-r from-green-400 to-blue-400 bg-clip-text text-transparent">
+          Empower Futures
+           </span>
+</h1>
             <p className="animate-fade-in-up-delay text-lg sm:text-xl text-primary-200 max-w-2xl mx-auto mb-10 leading-relaxed">
               Learn coding, design, languages, and more from fellow students. Share what you know, learn what you don't. Zero cost, infinite possibilities.
             </p>
