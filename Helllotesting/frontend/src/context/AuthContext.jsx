@@ -1,5 +1,6 @@
 import { createContext, useState, useEffect } from 'react';
 import axios from 'axios';
+import API_BASE_URL from '../config';
 
 export const AuthContext = createContext();
 
@@ -17,7 +18,7 @@ export const AuthProvider = ({ children }) => {
 
   const login = async (email, password) => {
     try {
-      const { data } = await axios.post('http://localhost:5000/api/auth/login', { email, password });
+      const { data } = await axios.post(`${API_BASE_URL}/api/auth/login`, { email, password });
       setUser(data);
       localStorage.setItem('userInfo', JSON.stringify(data));
       return { success: true };
@@ -28,7 +29,7 @@ export const AuthProvider = ({ children }) => {
 
   const registerUser = async (name, email, password) => {
     try {
-      const { data } = await axios.post('http://localhost:5000/api/auth/register', { name, email, password });
+      const { data } = await axios.post(`${API_BASE_URL}/api/auth/register`, { name, email, password });
       return { success: true, email: data.email };
     } catch (error) {
       return { success: false, message: error.response?.data?.message || 'Registration failed' };
@@ -37,7 +38,7 @@ export const AuthProvider = ({ children }) => {
   
   const verifyOtp = async (email, otp) => {
     try {
-      const { data } = await axios.post('http://localhost:5000/api/auth/verify-otp', { email, otp });
+      const { data } = await axios.post(`${API_BASE_URL}/api/auth/verify-otp`, { email, otp });
       setUser(data);
       localStorage.setItem('userInfo', JSON.stringify(data));
       return { success: true };

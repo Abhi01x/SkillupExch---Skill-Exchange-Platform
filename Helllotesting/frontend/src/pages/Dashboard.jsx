@@ -1,5 +1,6 @@
 import { useState, useEffect, useContext } from 'react';
 import axios from 'axios';
+import API_BASE_URL from '../config';
 import { AuthContext } from '../context/AuthContext';
 import { useNavigate, useLocation } from 'react-router-dom';
 import {
@@ -40,21 +41,21 @@ const Dashboard = () => {
 
   const fetchUsers = async (search = '') => {
     try {
-      const { data } = await axios.get(`http://localhost:5000/api/users?keyword=${search}`, config);
+      const { data } = await axios.get(`${API_BASE_URL}/api/users?keyword=${search}`, config);
       setUsers(data);
     } catch (error) { console.error(error); }
   };
 
   const fetchRequests = async () => {
     try {
-      const { data } = await axios.get(`http://localhost:5000/api/requests`, config);
+      const { data } = await axios.get(`${API_BASE_URL}/api/requests`, config);
       setRequests(data);
     } catch (error) { console.error(error); }
   };
 
   const fetchChatUsers = async () => {
     try {
-      const { data } = await axios.get(`http://localhost:5000/api/messages/chats`, config);
+      const { data } = await axios.get(`${API_BASE_URL}/api/messages/chats`, config);
       setChatUsers(data);
     } catch (error) { console.error(error); }
   };
@@ -63,7 +64,7 @@ const Dashboard = () => {
 
   const sendRequest = async (receiverId, skill) => {
     try {
-      await axios.post(`http://localhost:5000/api/requests`, { receiverId, skill }, config);
+      await axios.post(`${API_BASE_URL}/api/requests`, { receiverId, skill }, config);
       alert('Request sent successfully!');
       fetchRequests();
     } catch (error) {
@@ -73,7 +74,7 @@ const Dashboard = () => {
 
   const updateRequestStatus = async (id, status) => {
     try {
-      await axios.put(`http://localhost:5000/api/requests/${id}/status`, { status }, config);
+      await axios.put(`${API_BASE_URL}/api/requests/${id}/status`, { status }, config);
       fetchRequests();
       fetchChatUsers();
     } catch (error) { alert('Failed to update status'); }
@@ -83,7 +84,7 @@ const Dashboard = () => {
     const ratingValue = ratingData[requestId];
     if (!ratingValue || ratingValue < 1 || ratingValue > 5) return alert('Please select a rating between 1 and 5');
     try {
-      await axios.post(`http://localhost:5000/api/users/${userId}/rate`, { rating: ratingValue }, config);
+      await axios.post(`${API_BASE_URL}/api/users/${userId}/rate`, { rating: ratingValue }, config);
       alert('User rated successfully!');
       fetchUsers();
     } catch (error) { alert('Failed to submit rating'); }
@@ -92,7 +93,7 @@ const Dashboard = () => {
   const deleteSkill = async (skill) => {
     if (!window.confirm(`Remove "${skill}" from your skills?`)) return;
     try {
-      const { data } = await axios.delete(`http://localhost:5000/api/users/profile/skill`, { ...config, data: { skill } });
+      const { data } = await axios.delete(`${API_BASE_URL}/api/users/profile/skill`, { ...config, data: { skill } });
       const updatedUser = { ...user, ...data };
       setUser(updatedUser);
       localStorage.setItem('userInfo', JSON.stringify(updatedUser));
@@ -107,7 +108,7 @@ const Dashboard = () => {
     }
     try {
       const newSkills = user.skillsToTeach.map(s => s === oldSkill ? editSkillValue.trim() : s);
-      const { data } = await axios.put(`http://localhost:5000/api/users/profile`, { ...user, skillsToTeach: newSkills }, config);
+      const { data } = await axios.put(`${API_BASE_URL}/api/users/profile`, { ...user, skillsToTeach: newSkills }, config);
       const updatedUser = { ...user, ...data };
       setUser(updatedUser);
       localStorage.setItem('userInfo', JSON.stringify(updatedUser));

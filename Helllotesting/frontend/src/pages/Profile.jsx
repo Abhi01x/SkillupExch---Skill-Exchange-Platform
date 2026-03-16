@@ -1,5 +1,6 @@
 import { useState, useContext, useEffect } from 'react';
 import axios from 'axios';
+import API_BASE_URL from '../config';
 import { AuthContext } from '../context/AuthContext';
 import { User, FileText, GraduationCap, Lightbulb, Save, CheckCircle, AlertCircle, Star } from 'lucide-react';
 
@@ -36,7 +37,7 @@ const Profile = () => {
         skillsToLearn: profile.skillsToLearn.split(',').map(s => s.trim()).filter(s => s)
       };
 
-      const { data } = await axios.put(`http://localhost:5000/api/users/profile`, updatedData, config);
+      const { data } = await axios.put(`${API_BASE_URL}/api/users/profile`, updatedData, config);
       setUser({ ...user, ...data });
       localStorage.setItem('userInfo', JSON.stringify({ ...user, ...data }));
       setMessage('Profile updated successfully!');

@@ -1,6 +1,7 @@
 import { useState, useContext, useEffect } from 'react';
 import { AuthContext } from '../context/AuthContext';
 import axios from 'axios';
+import API_BASE_URL from '../config';
 import { GraduationCap, Lightbulb, X, ArrowRight, Sparkles, Plus } from 'lucide-react';
 
 const SkillSetupModal = ({ isOpen, onClose }) => {
@@ -61,7 +62,7 @@ const SkillSetupModal = ({ isOpen, onClose }) => {
         skillsToLearn: learnTags,
       };
 
-      const { data } = await axios.put('http://localhost:5000/api/users/profile', updatedData, config);
+      const { data } = await axios.put(`${API_BASE_URL}/api/users/profile`, updatedData, config);
       const updatedUser = { ...user, ...data };
       setUser(updatedUser);
       localStorage.setItem('userInfo', JSON.stringify(updatedUser));

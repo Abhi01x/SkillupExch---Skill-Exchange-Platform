@@ -1,6 +1,7 @@
 import { useState, useEffect, useContext, useRef } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import axios from 'axios';
+import API_BASE_URL from '../config';
 import { AuthContext } from '../context/AuthContext';
 import { io } from 'socket.io-client';
 import { ArrowLeft, Send, MessageCircle } from 'lucide-react';
@@ -16,7 +17,7 @@ const Chat = () => {
   const messagesEndRef = useRef(null);
 
   useEffect(() => {
-    socket.current = io('http://localhost:5000');
+    socket.current = io(API_BASE_URL);
     socket.current.emit('register', user._id);
 
     socket.current.on('receiveMessage', (message) => {
@@ -42,7 +43,7 @@ const Chat = () => {
   const fetchMessages = async () => {
     try {
       const config = { headers: { Authorization: `Bearer ${user.token}` } };
-      const { data } = await axios.get(`http://localhost:5000/api/messages/${userId}`, config);
+      const { data } = await axios.get(`${API_BASE_URL}/api/messages/${userId}`, config);
       setMessages(data);
     } catch (error) {
       console.error('Error fetching messages', error);
@@ -52,7 +53,7 @@ const Chat = () => {
   const fetchReceiverDetails = async () => {
     try {
       const config = { headers: { Authorization: `Bearer ${user.token}` } };
-      const { data } = await axios.get(`http://localhost:5000/api/users`, config);
+      const { data } = await axios.get(`${API_BASE_URL}/api/users`, config);
       const specificUser = data.find(u => u._id === userId);
       if(specificUser) setReceiver(specificUser);
     } catch (error) {
@@ -66,7 +67,7 @@ const Chat = () => {
 
     try {
       const config = { headers: { Authorization: `Bearer ${user.token}` } };
-      const { data } = await axios.post(`http://localhost:5000/api/messages`, {
+      const { data } = await axios.post(`${API_BASE_URL}/api/messages`, {
         receiverId: userId,
         text: newMessage
       }, config);
