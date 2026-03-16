@@ -1,0 +1,11 @@
+const express = require('express');
+const router = express.Router();
+const { getUserProfile, updateUserProfile, getUsers, rateUser, deleteSkill } = require('../controllers/userController');
+const { protect } = require('../middleware/authMiddleware');
+
+router.route('/profile').get(protect, getUserProfile).put(protect, updateUserProfile);
+router.route('/profile/skill').delete(protect, deleteSkill);
+router.route('/').get(protect, getUsers);
+router.route('/:id/rate').post(protect, rateUser);
+
+module.exports = router;
