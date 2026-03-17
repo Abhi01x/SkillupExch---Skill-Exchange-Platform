@@ -6,7 +6,7 @@
 
 ## 🌐 Live Demo
 
-🔗  https://skillup-exch-skill-exchange-platfor.vercel.app/)](https://skillup-exch-skill-exchange-platfor.vercel.app
+🔗  https://skillup-exch-skill-exchange-platfor.vercel.app
 
 ---
 
